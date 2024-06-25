@@ -1,6 +1,6 @@
 # MyGlance: 基于Glance的二次开发
 
-**原项目地址：**[https://github.com/glanceapp/glance](glanceapp/glance)
+**原项目地址：**[glanceapp/glance](https://github.com/glanceapp/glance)
 
 我很喜欢glance的设计，但是对我来它还存在一定的二次开发空间，所以我基于glance进行了二次开发，这里是我的一些记录。
 
