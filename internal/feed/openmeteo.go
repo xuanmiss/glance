@@ -54,6 +54,7 @@ var commonCountryAbbreviations = map[string]string{
 	"US":  "United States",
 	"USA": "United States",
 	"UK":  "United Kingdom",
+	"CN":  "China",
 }
 
 func expandCountryAbbreviations(name string) string {

@@ -8,27 +8,53 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"sync"
 	"time"
 )
 
 const defaultClientTimeout = 5 * time.Second
 
-var defaultClient = &http.Client{
-	Timeout: defaultClientTimeout,
-}
+var (
+	insecureClientTransport = &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
 
-var insecureClientTransport = &http.Transport{
-	TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-}
+	defaultTransport = &http.Transport{}
 
-var defaultInsecureClient = &http.Client{
-	Timeout:   defaultClientTimeout,
-	Transport: insecureClientTransport,
-}
+	defaultClient = &http.Client{
+		Timeout:   defaultClientTimeout,
+		Transport: defaultTransport,
+	}
+
+	defaultInsecureClient = &http.Client{
+		Timeout:   defaultClientTimeout,
+		Transport: insecureClientTransport,
+	}
+)
 
 type RequestDoer interface {
 	Do(*http.Request) (*http.Response, error)
+}
+
+func SetProxy(proxyURL string) error {
+	proxyURLParsed, err := url.Parse(proxyURL)
+	if err != nil {
+		return fmt.Errorf("invalid proxy URL: %w", err)
+	}
+
+	proxyTransport := &http.Transport{
+		Proxy: http.ProxyURL(proxyURLParsed),
+	}
+
+	insecureProxyTransport := &http.Transport{
+		Proxy:           http.ProxyURL(proxyURLParsed),
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
+	}
+
+	defaultClient.Transport = proxyTransport
+	defaultInsecureClient.Transport = insecureProxyTransport
+	return nil
 }
 
 func addBrowserUserAgentHeader(request *http.Request) {

@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/glanceapp/glance/internal/assets"
+	"github.com/glanceapp/glance/internal/feed"
 	"github.com/glanceapp/glance/internal/widget"
 )
 
@@ -42,6 +43,7 @@ type Server struct {
 	Port       uint16    `yaml:"port"`
 	AssetsPath string    `yaml:"assets-path"`
 	StartedAt  time.Time `yaml:"-"`
+	ProxyURL   string    `yaml:"proxy-url"`
 }
 
 type Column struct {
@@ -192,6 +194,12 @@ func FileServerWithCache(fs http.FileSystem, cacheDuration time.Duration) http.H
 func (a *Application) Serve() error {
 	// TODO: add gzip support, static files must have their gzipped contents cached
 	// TODO: add HTTPS support
+	if a.Config.Server.ProxyURL != "" {
+		slog.Info("Setting proxy", "url", a.Config.Server.ProxyURL)
+		if err := feed.SetProxy(a.Config.Server.ProxyURL); err != nil {
+			return err
+		}
+	}
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /{$}", a.HandlePageRequest)
