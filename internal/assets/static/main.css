@@ -1,10 +1,12 @@
-@font-face {
-    font-family: 'JetBrains Mono';
+@import url('https://api.zeoseven.com/zsft/cn/2/main/result.css');
+
+/* @font-face {
+    font-family: "JetBrains Mono";
     font-style: normal;
     font-weight: 400;
     font-display: swap;
     src: url('fonts/JetBrainsMono-Regular.woff2') format('woff2');
-}
+} */
 
 :root {
     font-size: 10px;
@@ -271,7 +273,8 @@ ul {
 
 body {
     font-size: 1.3rem;
-    font-family: 'JetBrains Mono', monospace;
+    /* font-family: 'JetBrains Mono', monospace; */
+    font-family: "LXGW ZhenKai";
     font-variant-ligatures: none;
     line-height: 1.6;
     color: var(--color-text-base);
