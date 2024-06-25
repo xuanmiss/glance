@@ -43,17 +43,19 @@ func SetProxy(proxyURL string) error {
 		return fmt.Errorf("invalid proxy URL: %w", err)
 	}
 
-	proxyTransport := &http.Transport{
-		Proxy: http.ProxyURL(proxyURLParsed),
+	setupTransport := func(transport *http.Transport, insecureSkipVerify bool) {
+		transport.Proxy = http.ProxyURL(proxyURLParsed)
+		if insecureSkipVerify {
+			if transport.TLSClientConfig == nil {
+				transport.TLSClientConfig = &tls.Config{}
+			}
+			transport.TLSClientConfig.InsecureSkipVerify = true
+		}
 	}
 
-	insecureProxyTransport := &http.Transport{
-		Proxy:           http.ProxyURL(proxyURLParsed),
-		TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-	}
+	setupTransport(defaultTransport, false)
+	setupTransport(insecureClientTransport, true)
 
-	defaultClient.Transport = proxyTransport
-	defaultInsecureClient.Transport = insecureProxyTransport
 	return nil
 }
 

@@ -1,111 +1,18 @@
-<p align="center"><em>What if you could see everything at a...</em></p>
-<h1 align="center">Glance</h1>
-<p align="center"><a href="#installation">Install</a> • <a href="docs/configuration.md">Configuration</a> • <a href="docs/themes.md">Themes</a></p>
+# MyGlance: 基于Glance的二次开发
 
-![example homepage](docs/images/readme-main-image.png)
+**原项目地址：**[https://github.com/glanceapp/glance](glanceapp/glance)
 
-### Features
-#### Various widgets
-* RSS feeds
-* Subreddit posts
-* Weather
-* Bookmarks
-* Hacker News
-* Lobsters
-* Latest YouTube videos from specific channels
-* Clock
-* Calendar
-* Stocks
-* iframe
-* Twitch channels & top games
-* GitHub releases
-* Repository overview
-* Site monitor
-* Search box
+我很喜欢glance的设计，但是对我来它还存在一定的二次开发空间，所以我基于glance进行了二次开发，这里是我的一些记录。
 
-#### Themeable
-![multiple color schemes example](docs/images/themes-example.png)
+## 现在完成了什么？
 
-#### Optimized for mobile devices
-![mobile device previews](docs/images/mobile-preview.png)
+- [x] 添加了中文字体（通过第三方CDN）
+- [x] 添加了http代理设置，可用于解锁反爬机制严格的网站或者部署在国内使用（在配置文件server中添加proxy-url即可）
+- [x] 我在意的一些细节
 
-#### Fast and lightweight
-* Minimal JS, no bloated frameworks
-* Very few dependencies
-* Single, easily distributed <15mb binary and just as small docker container
-* All requests are parallelized, uncached pages usually load within ~1s (depending on internet speed and number of widgets)
+## 未来我想做什么？
 
-### Configuration
-Checkout the [configuration docs](docs/configuration.md) to learn more. A [preconfigured page](docs/configuration.md#preconfigured-page) is also available to get you started quickly.
-
-### Installation
-> [!CAUTION]
->
-> The project is under active development, expect things to break every once in a while.
-
-#### Manual
-Checkout the [releases page](https://github.com/glanceapp/glance/releases) for available binaries. You can place the binary inside `/opt/glance/` and have it start with your server via a [systemd service](https://linuxhandbook.com/create-systemd-services/). To specify a different path for the config file use the `--config` option:
-
-```bash
-/opt/glance/glance --config /etc/glance.yml
-```
-
-#### Docker
-> [!IMPORTANT]
->
-> Make sure you have a valid `glance.yml` file in the same directory before running the container.
-
-```bash
-docker run -d -p 8080:8080 \
-  -v ./glance.yml:/app/glance.yml \
-  -v /etc/timezone:/etc/timezone:ro \
-  -v /etc/localtime:/etc/localtime:ro \
-  glanceapp/glance
-```
-
-Or if you prefer docker compose:
-
-```yaml
-services:
-  glance:
-    image: glanceapp/glance
-    volumes:
-      - ./glance.yml:/app/glance.yml
-      - /etc/timezone:/etc/timezone:ro
-      - /etc/localtime:/etc/localtime:ro
-    ports:
-      - 8080:8080
-    restart: unless-stopped
-```
-
-### Building from source
-
-Requirements: [Go](https://go.dev/dl/) >= v1.22
-
-To build:
-
-```bash
-go build -o build/glance .
-```
-
-To run:
-
-```bash
-go run .
-```
-
-### Building Docker image
-
-Build the image:
-
-**Make sure to replace "owner" with your name or organization.**
-
-```bash
-docker build -t owner/glance:latest -f Dockerfile.single-platform .
-```
-
-Push the image to your registry:
-
-```bash
-docker push owner/glance:latest
-```
+- [ ] 细化代理设置
+- [ ] 更好地支持中文社区订阅
+- [ ] 更方便的部署方式
+- [ ] 其他我在意的需求
