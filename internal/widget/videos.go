@@ -3,6 +3,7 @@ package widget
 import (
 	"context"
 	"html/template"
+	"sort"
 	"time"
 
 	"github.com/glanceapp/glance/internal/assets"
@@ -16,6 +17,7 @@ type Videos struct {
 	Style             string      `yaml:"style"`
 	CollapseAfterRows int         `yaml:"collapse-after-rows"`
 	Channels          []string    `yaml:"channels"`
+	BilibiliUIDs      []int       `yaml:"bilibili-uids"`
 	Limit             int         `yaml:"limit"`
 }
 
@@ -34,7 +36,20 @@ func (widget *Videos) Initialize() error {
 }
 
 func (widget *Videos) Update(ctx context.Context) {
-	videos, err := feed.FetchYoutubeChannelUploads(widget.Channels, widget.VideoUrlTemplate)
+	bilibiliVideos, err := feed.FetchBilibiliUploads(widget.BilibiliUIDs)
+
+	if err != nil {
+		return
+	}
+	youtubeVideos, err := feed.FetchYoutubeChannelUploads(widget.Channels, widget.VideoUrlTemplate)
+	if err != nil {
+		return
+	}
+
+	videos := append(bilibiliVideos, youtubeVideos...)
+	sort.Slice(videos, func(i, j int) bool {
+		return videos[i].TimePosted.After(videos[j].TimePosted)
+	})
 
 	if !widget.canContinueUpdateAfterHandlingErr(err) {
 		return

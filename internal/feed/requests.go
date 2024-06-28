@@ -31,10 +31,43 @@ var (
 		Timeout:   defaultClientTimeout,
 		Transport: insecureClientTransport,
 	}
+
+	clientCache = sync.Map{}
 )
 
 type RequestDoer interface {
 	Do(*http.Request) (*http.Response, error)
+}
+
+// GetClient 返回一个 http.Client 指针，根据提供的代理 URL 和安全设置创建
+func GetClient(proxyURL string, insecure bool) (*http.Client, error) {
+
+	if client, ok := clientCache.Load(proxyURL); ok {
+		return client.(*http.Client), nil
+	}
+
+	proxyURLParsed, err := url.Parse(proxyURL)
+	if err != nil {
+		return nil, fmt.Errorf("invalid proxy URL: %w", err)
+	}
+
+	transport := &http.Transport{
+		Proxy: http.ProxyURL(proxyURLParsed),
+		TLSClientConfig: &tls.Config{
+			InsecureSkipVerify: insecure,
+		},
+		MaxIdleConns:        100,
+		MaxIdleConnsPerHost: 100,
+		IdleConnTimeout:     90 * time.Second,
+	}
+
+	client := &http.Client{
+		Timeout:   defaultClientTimeout,
+		Transport: transport,
+	}
+
+	clientCache.Store(proxyURL, client)
+	return client, nil
 }
 
 func SetProxy(proxyURL string) error {
@@ -55,6 +88,15 @@ func SetProxy(proxyURL string) error {
 
 	setupTransport(defaultTransport, false)
 	setupTransport(insecureClientTransport, true)
+
+	_, err = GetClient(proxyURL, false)
+	if err != nil {
+		return err
+	}
+	_, err = GetClient(proxyURL, true)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
