@@ -9,7 +9,7 @@
 
 **2024-0628更新：**
 
-- [x] 支持bilibili视频订阅
+- [x] 支持bilibili视频订阅（参考了[https://github.com/glanceapp/glance/pull/100]）
 
 **2024-0625更新：**
 
