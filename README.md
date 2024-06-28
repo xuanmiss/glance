@@ -2,7 +2,7 @@
 
 **原项目地址：**[glanceapp/glance](https://github.com/glanceapp/glance)
 
-我很喜欢glance的设计，但是对我来它还存在一定的二次开发空间，所以我基于glance进行了二次开发，这里是我的一些记录。
+我很喜欢glance的设计，但是对我来它还存在一定的改良空间，所以我基于glance进行了二次开发，这里是我的一些记录。
 因为基本是面向我个人的所以现在说明还很不完善QAQ
 
 ## 现在完成了什么？
@@ -10,12 +10,21 @@
 **2024-0628更新：**
 
 - [x] 支持bilibili视频订阅
+- [x] 建立docker镜像
 
 **2024-0625更新：**
 
 - [x] 添加了中文字体（通过第三方CDN）
 - [x] 添加了http代理设置，可用于解锁反爬机制严格的网站或者部署在国内使用（在配置文件server中添加proxy-url即可）
 - [x] 我在意的一些细节
+
+## 部署方式
+
+### 使用docker镜像
+
+```shell
+docker run -d -p 8080:8080 -v /path/to/glance.yml:/app/glance.yml --name myglance qihr2022/glance
+```
 
 ## 未来我想做什么？
 
