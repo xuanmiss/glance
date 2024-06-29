@@ -10,6 +10,8 @@
 **2024-0628更新：**
 
 - [x] 支持bilibili视频订阅（参考了[https://github.com/glanceapp/glance/pull/100]的部分代码）
+- [x] 上传了docker镜像
+- [x] 添加了docker-compose构建文件
 
 **2024-0625更新：**
 
@@ -23,6 +25,14 @@
 
 ```shell
 docker run -d -p 8080:8080 -v /path/to/glance.yml:/app/glance.yml --name myglance qihr2022/glance
+```
+
+### 使用docker-compose
+
+```yaml
+git clone https://github.com/7Sageer/MyGlance.git
+cd MyGlance
+docker-compose up -d
 ```
 
 ## 未来我想做什么？
