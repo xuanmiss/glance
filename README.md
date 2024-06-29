@@ -21,18 +21,19 @@
 
 ## 部署方式
 
+### 使用docker-compose(推荐)
+
+```shell
+git clone https://github.com/7Sageer/MyGlance.git
+cd MyGlance
+vi glance.yml # 修改配置文件
+docker-compose up -d
+```
+
 ### 使用docker镜像
 
 ```shell
 docker run -d -p 8080:8080 -v /path/to/glance.yml:/app/glance.yml --name myglance qihr2022/glance
-```
-
-### 使用docker-compose
-
-```yaml
-git clone https://github.com/7Sageer/MyGlance.git
-cd MyGlance
-docker-compose up -d
 ```
 
 ## 未来我想做什么？
