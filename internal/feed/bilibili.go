@@ -22,6 +22,9 @@ type bilibiliSpaceResponseJson struct {
 }
 
 func FetchBilibiliUploads(uidList []int) (Videos, error) {
+	if len(uidList) == 0 {
+		return make(Videos, 0), nil
+	}
 	requests := make([]*http.Request, 0, len(uidList))
 	u := "https://app.bilibili.com/x/v2/space/archive/cursor?vmid="
 	for i := range uidList {
